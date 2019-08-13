@@ -1,0 +1,204 @@
+<body>
+  <h1 class="aclass">Ecommerce App</h1>
+ 
+          <div class="col-md-12 indiv" *ngIf="Showlist">
+            <table>
+              <tr>
+                <td> <span>Sorting</span>
+                  <select [(ngModel)]="selecteditem">
+                      <option *ngFor="let item of sortingArray" [value]="item.value">
+                          {{item.name}}
+                        </option>
+                        </select></td>
+                        <td>
+                            <select [(ngModel)]="selectedsearch">
+                                <option value="name">
+                                   Search by name
+                                  </option>
+                                  <option value="content">
+                                      Search by description
+                                     </option>
+                                  </select>
+                                  <select [(ngModel)]="SearchText" *ngIf="selectedsearch=='name'">
+                                      <option *ngFor="let item of tempProduct" [value]="item.name">
+                                          {{item.name}}
+                                        </option>
+                                        </select>
+                                        <select [(ngModel)]="SearchText"  *ngIf="selectedsearch=='content'" >
+                                            <option *ngFor="let item of tempProduct" [value]="item.content">
+                                                {{item.content}}
+                                              </option>
+                                              </select>
+                          <button type="button" (click)="Searchfn()">Search</button><br>
+                        </td>
+                        <td> <a class="aclass" (click)="gotocart()">My Cart: {{NoOfItem}}</a></td>
+                        <td> <a class="aclass" (click)="gotowishlist()">My Wishlist: {{NoOfItemwishlist}}</a></td>
+              </tr>
+            </table>
+             
+
+          </div>
+ <div class="col-md-12 outdiv">
+   
+  <div class="col-md-12 indiv"  *ngIf="Showlist">
+    <table>
+      <tr *ngFor="let item of products | orderBy:selecteditem ">
+        <td><img src="{{item.imageUrl}}" alt=""/></td>
+        <td>
+            <div class="col-md-3 col-sm-3  col-xs-6  text-center disptblcl">
+                <button  class="quotesbtn1 submitBtn" type="button" (click)="viewmorefn(item)">
+                    View more
+                </button>
+            </div>
+        </td>
+        <td>
+            <div class="col-md-3 col-sm-3  col-xs-6  text-center disptblcl">
+                <button  class="quotesbtn1 submitBtn" type="button" (click)="buyfn(item)">
+                    Buy
+                </button>
+            </div>
+        </td>
+        <td>
+            <div class="col-md-3 col-sm-3  col-xs-6  text-center disptblcl" *ngIf="!item.added">
+                <button  class="quotesbtn1 submitBtn" type="button" (click)="AddtocartFn(item)" >
+                    Add to cart
+                </button>
+                </div>
+                <div class="col-md-3 col-sm-3  col-xs-6  text-center disptblcl" *ngIf="item.added">
+                <button  class="quotesbtn1 submitBtn" type="button"  >
+                    Added to cart
+                </button>
+            </div>
+        </td>
+        <td>
+            <div class="col-md-3 col-sm-3  col-xs-6  text-center disptblcl" *ngIf="!item.wishlist">
+                <button  class="quotesbtn1 submitBtn" type="button"  (click)="MyWhislist(item)" >
+                    wishlist 
+                </button>
+                </div>
+                <div class="col-md-3 col-sm-3  col-xs-6  text-center disptblcl" *ngIf="item.wishlist">
+                <button  class="quotesbtn1 submitBtn" type="button"  >
+                    wishlisted
+                </button>
+            </div>
+        </td>
+
+      </tr>
+      <span *ngIf="products.length==0" class="aclass">No Result Found...</span>
+    </table>
+
+
+</div>
+<div class="col-md-12 indiv"  *ngIf="buynowshow">
+  <table>
+    <tr>
+      <th> <h1 class="aclass">My Cart : {{NoOfItem}}</h1></th>
+    </tr>
+    <tr *ngFor="let item of CartArray">
+      <td><img src="{{item.imageUrl}}" alt=""/></td>
+      <td>Price: Rs.{{item.price}}</td>
+      <td>  <div class="col-md-3 col-sm-3  col-xs-6  text-center disptblcl">
+          <button  class="quotesbtn1 submitBtn" type="button" (click)="Proceed()">
+             Proceed
+          </button>
+      </div></td>
+    </tr>
+  </table>
+    
+    </div>
+    <div class="col-md-12 indiv"  *ngIf="buyshow">
+          <div class=" col-md-12 col-sm-12  col-xs-12 ">
+            <div class="col-md-12 col-sm-12  col-xs-12 nmdcard1">
+                <div class="col-md-6 col-sm-6  col-xs-6  text-center imgareah">
+          
+          
+                  <img src="{{BuyArray.imageUrl}}" alt=""/>
+          
+                </div>
+                <table>
+                  <tr>
+                    <td>{{BuyArray.name}}</td>
+                    <td>Price: Rs {{BuyArray.price}}</td>
+                    <td><div class="col-md-3 col-sm-3  col-xs-6  text-center disptblcl">
+                        <button  class="quotesbtn1 submitBtn" type="button" (click)="Proceed()">
+                           Proceed
+                        </button>
+                    </div></td>
+                  </tr>
+                </table>
+             
+            </div>
+          </div>
+          </div>
+    <div class="col-md-12 indiv"  *ngIf="wishlistshow">
+        <h1 class="aclass">My wishlist : {{NoOfItemwishlist}}</h1>
+          <div class=" col-md-12 col-sm-12  col-xs-12 " *ngFor="let item of wishlistArray">
+            <div class="col-md-12 col-sm-12  col-xs-12 nmdcard1">
+                <div class="col-md-6 col-sm-6  col-xs-6  text-center imgareah">          
+          
+                  <img src="{{item.imageUrl}}" alt=""/>
+                  <span>{{item.name}}</span>
+          
+                </div>
+            </div>
+          </div>
+     </div>
+    <div class="col-md-12 indiv"  *ngIf="Paymentshow">
+        <h1 class="aclass">Payment Option</h1>
+          <div class=" col-md-12 col-sm-12  col-xs-12 " >
+            <div class="col-md-12 col-sm-12  col-xs-12 nmdcard1">
+                <div class="col-md-6 col-sm-6  col-xs-6  text-center imgareah">
+          
+          
+                    <select [(ngModel)]="paymode">
+                        <option value="CC">Credit Card </option>
+                          <option value="DC">Debit Card  </option>
+                          </select>
+          
+                </div>
+               
+                <div class="col-md-3 col-sm-3  col-xs-6  text-center disptblcl">
+                    <button  class="quotesbtn1 submitBtn" type="button" (click)="Payfn()">
+                        Pay 
+                    </button>
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 indiv"  *ngIf="Thanksmsg">
+            <h1 class="aclass">Success</h1>
+              <div class=" col-md-12 col-sm-12  col-xs-12 " >
+                <div class="col-md-12 col-sm-12  col-xs-12 nmdcard1">
+                    <div class="col-md-6 col-sm-6  col-xs-6  text-center imgareah">
+              
+              <span>Yay, your order is successfully placed.we will deliver your order within 5-7 working days.</span>
+                       
+                    </div>
+                   
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 indiv"  *ngIf="showmore">
+              <h1 class="aclass">More Information about product</h1>
+              <table>
+                <tr>
+                  <th>Name</th>
+                  <th>Image</th>
+                  <th>Price</th>
+                  <th>Description</th>
+                  <th>Rating</th>
+                  <th>Review</th>
+                </tr>
+                <tr>
+                  <td>{{moreinforitem.name}}</td>
+                  <td> <img src="{{moreinforitem.imageUrl}}" alt=""/></td>
+                  <td>Rs.{{moreinforitem.price}}</td>
+                  <td>{{moreinforitem.content}}</td>
+                  <td>{{moreinforitem.rate}}</td>
+                  <td>{{moreinforitem.review}}</td>
+                  </tr>
+              </table>
+               
+                </div>
+</div>
+</body>
